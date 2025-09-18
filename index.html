@@ -6,64 +6,309 @@
   <title>Yataqxana Mini-Delivery</title>
   <style>
     /* iOS-like soft UI */
-    :root{
-      --bg:#f2f5f9;
-      --card:#ffffff;
-      --muted:#7b8598;
-      --accent:#2b6df6;
-      --glass: rgba(255,255,255,0.7);
-      --radius:16px;
-      --shadow: 0 8px 24px rgba(36,55,80,0.08);
+    :root {
+      --bg: #f2f5f9;
+      --card: #ffffff;
+      --muted: #7b8598;
+      --accent: #2b6df6;
+      --glass: rgba(255, 255, 255, 0.7);
+      --radius: 16px;
+      --shadow: 0 8px 24px rgba(36, 55, 80, 0.08);
     }
-    *{box-sizing:border-box;font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;}
-    body{margin:0;background:linear-gradient(180deg,var(--bg),#eef3fb);min-height:100vh;color:#14324b}
-    .app{max-width:1000px;margin:28px auto;padding:20px}
-    header{display:flex;justify-content:space-between;align-items:center;margin-bottom:18px}
-    .brand{display:flex;gap:12px;align-items:center}
-    .logo{width:56px;height:56px;border-radius:14px;background:linear-gradient(135deg,var(--accent),#6aa8ff);display:grid;place-items:center;color:white;font-weight:700;box-shadow:var(--shadow)}
-    h1{font-size:18px;margin:0}
-    p.lead{margin:0;color:var(--muted);font-size:13px}
-    .admin-btn{background:var(--card);border:none;padding:8px 12px;border-radius:12px;box-shadow:var(--shadow);cursor:pointer}
-    main{display:grid;grid-template-columns:1fr 340px;gap:18px}
-    /* left - catalog */
-    .catalog{background:var(--glass);border-radius:20px;padding:18px;box-shadow:var(--shadow)}
-    .categories{display:flex;gap:10px;margin-bottom:14px}
-    .cat{flex:1;background:var(--card);padding:12px;border-radius:12px;text-align:center;cursor:pointer;box-shadow:0 6px 18px rgba(16,32,70,0.04)}
-    .cat.active{outline:3px solid rgba(43,109,246,0.12)}
-    .products{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px}
-    .product{background:var(--card);border-radius:14px;padding:10px;display:flex;gap:10px;align-items:flex-start;box-shadow:0 6px 18px rgba(16,32,70,0.04)}
-    .thumb{width:76px;height:76px;border-radius:10px;flex-shrink:0;display:grid;place-items:center;background:#f7f9fc;overflow:hidden}
-    .thumb img{max-width:100%;max-height:100%;object-fit:cover}
-    .meta{flex:1}
-    .title{font-weight:600;margin:0;font-size:14px}
-    .desc{color:var(--muted);font-size:13px;margin-top:6px}
-    .price-add{display:flex;gap:8px;align-items:center;margin-top:8px}
-    .price{font-weight:700}
-    .add{background:var(--accent);color:white;border:none;padding:6px 10px;border-radius:10px;cursor:pointer}
-    /* right - cart */
-    .side{position:sticky;top:28px}
-    .cart{background:var(--card);padding:14px;border-radius:16px;box-shadow:var(--shadow)}
-    .cart h3{margin:0 0 8px 0}
-    .cart-list{max-height:360px;overflow:auto;margin-bottom:10px}
-    .cart-item{display:flex;gap:8px;align-items:center;padding:8px;border-radius:10px}
-    .cart-item .thumb{width:48px;height:48px;border-radius:8px}
-    .cart-item .info{flex:1}
-    .qty{display:flex;gap:6px;align-items:center}
-    .btn{background:var(--card);border:none;padding:8px 10px;border-radius:10px;cursor:pointer}
-    .checkout{background:linear-gradient(90deg,var(--accent),#4fb3ff);color:white;border:none;padding:10px;border-radius:12px;width:100%;font-weight:700;cursor:pointer}
+    * {
+      box-sizing: border-box;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
+    }
+    body {
+      margin: 0;
+      background: linear-gradient(180deg, var(--bg), #eef3fb);
+      min-height: 100vh;
+      color: #14324b;
+    }
+    .app {
+      max-width: 1000px;
+      margin: 28px auto;
+      padding: 20px;
+    }
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 18px;
+    }
+    .brand {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+    }
+    .logo {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: var(--accent);
+      color: white;
+      font-weight: bold;
+      font-size: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .brand-name {
+      font-weight: bold;
+      font-size: 18px;
+    }
+    .admin {
+      background: none;
+      border: none;
+      color: var(--muted);
+      font-weight: 500;
+      cursor: pointer;
+    }
+    .main {
+      display: grid;
+      gap: 20px;
+      grid-template-columns: 1fr 340px;
+    }
+    .menu {
+      background: var(--card);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 18px;
+    }
+    .categories {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 24px;
+      flex-wrap: wrap;
+    }
+    .cat {
+      background: var(--bg);
+      padding: 8px 16px;
+      border-radius: 8px;
+      font-size: 14px;
+      color: var(--muted);
+      font-weight: 500;
+      cursor: pointer;
+    }
+    .cat.active {
+      background: var(--accent);
+      color: white;
+      font-weight: 600;
+    }
+    .products {
+      display: grid;
+      gap: 16px;
+    }
+    .product {
+      display: flex;
+      gap: 12px;
+      background: var(--bg);
+      border-radius: var(--radius);
+      overflow: hidden;
+      padding-right: 16px;
+    }
+    .product .thumb {
+      width: 80px;
+      height: 80px;
+      flex-shrink: 0;
+      background: #eee;
+    }
+    .product .thumb img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .product .meta {
+      flex-grow: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-around;
+      padding: 8px 0;
+    }
+    .product .title {
+      font-weight: 600;
+      font-size: 16px;
+    }
+    .product .desc {
+      font-size: 12px;
+      color: var(--muted);
+    }
+    .price-add {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+    }
+    .price {
+      font-weight: bold;
+      font-size: 14px;
+    }
+    .add {
+      background: var(--accent);
+      color: white;
+      border: none;
+      padding: 6px 14px;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+    .small {
+      font-size: 12px;
+      color: var(--muted);
+      text-align: center;
+      padding: 10px;
+    }
+    .cart {
+      background: var(--card);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 18px;
+      position: sticky;
+      top: 28px;
+      align-self: flex-start;
+    }
+    .cart-item {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+    .cart-item .thumb {
+      width: 50px;
+      height: 50px;
+      border-radius: 8px;
+      overflow: hidden;
+    }
+    .cart-item img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .cart-item .info {
+      flex-grow: 1;
+    }
+    .total {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin: 16px 0;
+      padding: 10px 0;
+      border-top: 1px solid #eee;
+      border-bottom: 1px solid #eee;
+    }
+    .total-text {
+      font-weight: bold;
+    }
+    .checkout {
+      display: block;
+      width: 100%;
+      background: var(--accent);
+      color: white;
+      padding: 12px;
+      border-radius: 12px;
+      text-align: center;
+      font-weight: 600;
+      border: none;
+      cursor: pointer;
+    }
+    .checkout.disabled {
+      background: #ccc;
+      cursor: not-allowed;
+    }
     /* admin modal */
-    .modal-back{position:fixed;inset:0;display:none;align-items:center;justify-content:center;background:rgba(8,12,20,0.35);z-index:40}
-    .modal{width:420px;background:var(--card);border-radius:16px;padding:14px;box-shadow:0 18px 50px rgba(16,32,70,0.25)}
-    .modal h2{margin:0 0 10px}
-    .form-row{display:flex;flex-direction:column;gap:6px;margin-bottom:10px}
-    input[type=text],input[type=number],textarea,select,input[type=password]{padding:10px;border-radius:10px;border:1px solid #eef3fb}
-    label{font-size:13px;color:var(--muted)}
-    .small{font-size:12px;color:var(--muted)}
-    footer{margin-top:18px;text-align:center;color:var(--muted);font-size:13px}
-    @media(max-width:880px){main{grid-template-columns:1fr} .side{position:relative;top:0}}
+    .modal-back {
+      position: fixed;
+      inset: 0;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      background: rgba(8, 12, 20, 0.35);
+      z-index: 40;
+    }
+    .modal {
+      width: 420px;
+      background: var(--card);
+      border-radius: 16px;
+      padding: 14px;
+      box-shadow: 0 18px 50px rgba(16, 32, 70, 0.25);
+      max-height: 90vh;
+      overflow-y: auto;
+    }
+    .modal h2 {
+      margin: 0 0 10px;
+    }
+    .form-row {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      margin-bottom: 10px;
+    }
+    .form-row label {
+      font-weight: 500;
+      font-size: 14px;
+      color: #333;
+    }
+    .form-row input, .form-row select, .form-row textarea {
+      padding: 8px 12px;
+      border-radius: 8px;
+      border: 1px solid #eee;
+      background: #fafafa;
+      width: 100%;
+    }
+    .btn {
+      padding: 10px 20px;
+      border-radius: 8px;
+      border: none;
+      background: var(--accent);
+      color: white;
+      cursor: pointer;
+    }
+    .btn#adminClose {
+      background: #ccc;
+    }
+    @media (max-width: 768px) {
+      .main {
+        grid-template-columns: 1fr;
+      }
+      .app {
+        padding: 10px;
+      }
+    }
   </style>
+</head>
+<body>
+  <div class="app">
+    <header>
+      <div class="brand">
+        <div class="logo">Y</div>
+        <div class="brand-name">Yataqxana Mini-Delivery</div>
+      </div>
+      <button class="admin" id="adminOpen">Admin Paneli</button>
+    </header>
 
-  <!-- Firebase -->
+    <div class="main">
+      <div class="menu">
+        <div class="categories" id="categories"></div>
+        <div class="products" id="products"></div>
+      </div>
+
+      <div class="cart">
+        <div id="cartList"></div>
+        <div class="total">
+          <div class="total-text">Cəmi:</div>
+          <div class="total-sum" id="totalSum">0.00</div>
+        </div>
+        <button class="checkout" id="checkout">Sifariş ver</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-back" id="modalBack">
+    <div class="modal">
+      <h2 id="modalTitle"></h2>
+      <div id="modalContent"></div>
+    </div>
+  </div>
+
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-app.js";
     import { getDatabase, ref, push, onValue } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-database.js";
@@ -80,97 +325,58 @@
 
     const app = initializeApp(firebaseConfig);
     const db = getDatabase(app);
-  </script>
-</head>
 
-<body>
-  <div class="app">
-    <header>
-      <div class="brand">
-        <div class="logo">YD</div>
-        <div>
-          <h1>Yataqxana Mini-Delivery</h1>
-          <p class="lead">Ani ehtiyaclar üçün sürətli çatdırılma — tələbələr üçün</p>
-        </div>
-      </div>
-      <div>
-        <button class="admin-btn" id="adminOpen">Admin Girişi</button>
-      </div>
-    </header>
-
-    <main>
-      <section class="catalog">
-        <div class="categories" id="categories"></div>
-        <div class="products" id="products"></div>
-      </section>
-
-      <aside class="side">
-        <div class="cart">
-          <h3>Səbət</h3>
-          <div class="cart-list" id="cartList"></div>
-          <div style="display:flex;gap:8px;align-items:center;justify-content:space-between">
-            <div class="small">Cəmi: <span id="totalSum">0.00</span>₼</div>
-            <button class="checkout" id="checkout">Sifariş ver</button>
-          </div>
-        </div>
-      </aside>
-    </main>
-
-    <footer>Hazırlayan: Fuad bəy demo</footer>
-  </div>
-
-  <!-- Admin modal -->
-  <div class="modal-back" id="modalBack">
-    <div class="modal" id="modal">
-      <h2 id="modalTitle">Admin Girişi</h2>
-      <div id="modalContent"></div>
-    </div>
-  </div>
-
-  <script type="module">
-    import { ref, push, onValue } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-database.js";
     // Categories
     const CATEGORIES = [
-      {id:'hygiene', title:'Gigiyena və məişət'},
-      {id:'electro', title:'Elektronika'},
-      {id:'health', title:'Sağlamlıq'}
+      { id: 'hygiene', title: 'Gigiyena və məişət' },
+      { id: 'electro', title: 'Elektronika' },
+      { id: 'health', title: 'Sağlamlıq' }
     ];
 
     const $ = sel => document.querySelector(sel);
     const qs = sel => document.querySelectorAll(sel);
 
     let products = [];
+    let currentCat = CATEGORIES[0].id;
 
     const categoriesEl = $('#categories');
     const productsEl = $('#products');
 
     // SHA-256
-    async function sha256(message){
+    async function sha256(message) {
       const msgBuffer = new TextEncoder().encode(message);
       const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
       const hashArray = Array.from(new Uint8Array(hashBuffer));
-      return hashArray.map(b => b.toString(16).padStart(2,'0')).join('');
+      return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
     }
-    const ADMIN_HASH = '619759b7b598909933a42f24a9fa6bca1f8744f3d77d9c944c2085f7b8547244'; 
+    const ADMIN_HASH = '619759b7b598909933a42f24a9fa6bca1f8744f3d77d9c944c2085f7b8547244';
 
-    let currentCat = CATEGORIES[0].id;
-
-    function renderCategories(){
-      categoriesEl.innerHTML='';
-      CATEGORIES.forEach(c=>{
-        const b=document.createElement('div');b.className='cat'+(c.id===currentCat?' active':'');b.textContent=c.title;
-        b.onclick=()=>{currentCat=c.id;renderCategories();renderProducts();}
+    function renderCategories() {
+      categoriesEl.innerHTML = '';
+      CATEGORIES.forEach(c => {
+        const b = document.createElement('div');
+        b.className = 'cat' + (c.id === currentCat ? ' active' : '');
+        b.textContent = c.title;
+        b.onclick = () => {
+          currentCat = c.id;
+          renderCategories();
+          renderProducts();
+        }
         categoriesEl.appendChild(b);
       });
     }
 
-    function renderProducts(){
-      productsEl.innerHTML='';
-      const list = products.filter(p=>p.cat===currentCat);
-      if(list.length===0){productsEl.innerHTML='<div class="small">Bu kateqoriyada məhsul yoxdur.</div>';return}
-      list.forEach(p=>{
-        const el=document.createElement('div');el.className='product';
-        el.innerHTML=`<div class="thumb"><img src="${p.img}" alt=""></div>
+    function renderProducts() {
+      productsEl.innerHTML = '';
+      const list = products.filter(p => p.cat === currentCat);
+      if (list.length === 0) {
+        productsEl.innerHTML = '<div class="small">Bu kateqoriyada məhsul yoxdur.</div>';
+        return;
+      }
+      list.forEach(p => {
+        const el = document.createElement('div');
+        el.className = 'product';
+        el.innerHTML = `<div class="thumb"><img src="${p.img}" alt=""></div>
           <div class="meta">
             <div class="title">${p.name}</div>
             <div class="desc">${p.desc}</div>
@@ -181,73 +387,65 @@
           </div>`;
         productsEl.appendChild(el);
       });
-      qs('.add').forEach(b=>b.onclick=()=>addToCart(b.dataset.id));
+      qs('.add').forEach(b => b.onclick = () => addToCart(b.dataset.id));
     }
 
     // Cart
-    function loadCart(){return JSON.parse(localStorage.getItem('yd_cart')||'[]')}
-    function saveCart(c){localStorage.setItem('yd_cart',JSON.stringify(c))}
-    function addToCart(id){const item=products.find(x=>x.id===id); if(!item) return;
-      let cart = loadCart();
-      const existing=cart.find(c=>c.id===id);
-      if(existing) existing.qty++; else cart.push({id:item.id,name:item.name,price:item.price,img:item.img,qty:1});
-      saveCart(cart); renderCart();
+    function loadCart() {
+      return JSON.parse(localStorage.getItem('yd_cart') || '[]')
     }
-    function renderCart(){
-      const el = $('#cartList'); el.innerHTML=''; const cart=loadCart(); if(cart.length===0){el.innerHTML='<div class="small">Səbət boşdur</div>';$('#totalSum').textContent='0.00';return}
-      let total=0;
-      cart.forEach(i=>{total += i.price*i.qty;
-        const row=document.createElement('div');row.className='cart-item';
-        row.innerHTML=`<div class="thumb"><img src="${i.img}"></div><div class="info"><div style='font-weight:600'>${i.name}</div><div class='small'>${Number(i.price).toFixed(2)}₼ x ${i.qty}</div></div>`;
+    function saveCart(c) {
+      localStorage.setItem('yd_cart', JSON.stringify(c))
+    }
+    function addToCart(id) {
+      const item = products.find(x => x.id === id);
+      if (!item) return;
+      let cart = loadCart();
+      const existing = cart.find(c => c.id === id);
+      if (existing) existing.qty++;
+      else cart.push({ id: item.id, name: item.name, price: item.price, img: item.img, qty: 1 });
+      saveCart(cart);
+      renderCart();
+    }
+
+    function renderCart() {
+      const el = $('#cartList');
+      el.innerHTML = '';
+      const cart = loadCart();
+      if (cart.length === 0) {
+        el.innerHTML = '<div class="small">Səbət boşdur</div>';
+        $('#totalSum').textContent = '0.00';
+        return
+      }
+      let total = 0;
+      cart.forEach(i => {
+        total += i.price * i.qty;
+        const row = document.createElement('div');
+        row.className = 'cart-item';
+        row.innerHTML = `<div class="thumb"><img src="${i.img}"></div><div class="info"><div style='font-weight:600'>${i.name}</div><div class='small'>${Number(i.price).toFixed(2)}₼ x ${i.qty}</div></div>`;
         el.appendChild(row);
       });
-      $('#totalSum').textContent=total.toFixed(2);
+      $('#totalSum').textContent = total.toFixed(2);
     }
-	
-	// Checkout düyməsinin funksiyası
-$('#checkout').onclick = () => {
-    const cart = loadCart();
-    if (cart.length === 0) {
+
+    // Checkout düyməsinin funksiyası
+    $('#checkout').onclick = () => {
+      const cart = loadCart();
+      if (cart.length === 0) {
         alert('Səbət boşdur. Zəhmət olmasa məhsul əlavə edin.');
         return;
-    }
-    openCheckoutModal();
-};
-
-    // Firebase load
-    import { getDatabase } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-database.js";
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-app.js";
-    const firebaseConfig = {apiKey:"AIzaSyC2g57gFRsfA3-U-tnBTS52Jj0mI5xJhaA", authDomain:"student-bazar-53bcf.firebaseapp.com", databaseURL:"https://student-bazar-53bcf-default-rtdb.firebaseio.com", projectId:"student-bazar-53bcf", storageBucket:"student-bazar-53bcf.appspot.com", messagingSenderId:"236779372508", appId:"1:236779372508:web:5d1402edd93fa8b92b5919"};
-    const app = initializeApp(firebaseConfig);
-    const db = getDatabase(app);
-
-    onValue(ref(db,'products'), snapshot=>{
-      products=[]; snapshot.forEach(snap=>{
-        const val = snap.val(); products.push({...val,id:snap.key});
-      });
-      renderProducts();
-    });
-
-    // Admin modal
-    const modalBack = $('#modalBack'); const modalContent = $('#modalContent'); const modalTitle = $('#modalTitle');
-    $('#adminOpen').onclick=()=>openAdminLogin();
-    function openAdminLogin(){
-      modalTitle.textContent='Admin Girişi';
-      modalContent.innerHTML=`<div class='form-row'><label>Şifrə</label><input type='password' id='adminPass'></div>
-      <div style='display:flex;gap:8px;justify-content:flex-end'><button class='btn' id='adminCancel'>İmtina</button><button class='btn' id='adminDo'>Giriş</button></div>`;
-      modalBack.style.display='flex';
-      $('#adminCancel').onclick=()=>{modalBack.style.display='none';};
-      $('#adminDo').onclick=async ()=>{
-        const val = $('#adminPass').value;
-        const valHash = await sha256(val);
-        if(valHash===ADMIN_HASH) openAdminPanel(); else alert('Yanlış şifrə');
       }
-    }
-	
-	// Sifariş məlumatlarını soruşan modalı açır
-function openCheckoutModal() {
-    modalTitle.textContent = 'Sifariş məlumatları';
-    modalContent.innerHTML = `
+      openCheckoutModal();
+    };
+
+    // Sifariş məlumatlarını soruşan modalı açır
+    function openCheckoutModal() {
+      const modalBack = $('#modalBack');
+      const modalContent = $('#modalContent');
+      const modalTitle = $('#modalTitle');
+
+      modalTitle.textContent = 'Sifariş məlumatları';
+      modalContent.innerHTML = `
         <div class='form-row'><label>Bina Nömrəsi</label>
             <select id='building'>
                 <option value='A'>Bina A</option>
@@ -263,37 +461,37 @@ function openCheckoutModal() {
             <button class='btn checkout' id='confirmOrder'>Təsdiqlə</button>
         </div>
     `;
-    modalBack.style.display = 'flex';
+      modalBack.style.display = 'flex';
 
-    $('#cancelOrder').onclick = () => {
+      $('#cancelOrder').onclick = () => {
         modalBack.style.display = 'none';
-    };
+      };
 
-    $('#confirmOrder').onclick = () => {
+      $('#confirmOrder').onclick = () => {
         confirmOrder();
-    };
-}
+      };
+    }
 
-// Sifarişi Firebase-ə göndərir
-async function confirmOrder() {
-    const building = $('#building').value;
-    const floor = $('#floor').value.trim();
-    const room = $('#room').value.trim();
-    const phone = $('#phone').value.trim();
-    const cart = loadCart();
-    const total = parseFloat($('#totalSum').textContent);
+    // Sifarişi Firebase-ə göndərir
+    async function confirmOrder() {
+      const building = $('#building').value;
+      const floor = $('#floor').value.trim();
+      const room = $('#room').value.trim();
+      const phone = $('#phone').value.trim();
+      const cart = loadCart();
+      const total = parseFloat($('#totalSum').textContent);
 
-    if (!floor || !room || !phone) {
+      if (!floor || !room || !phone) {
         alert('Bütün sahələri doldurmaq zəruridir.');
         return;
-    }
+      }
 
-    if (cart.length === 0) {
+      if (cart.length === 0) {
         alert('Səbət boşdur.');
         return;
-    }
+      }
 
-    const orderData = {
+      const orderData = {
         building,
         floor,
         room,
@@ -301,45 +499,204 @@ async function confirmOrder() {
         total,
         items: cart,
         timestamp: new Date().toISOString()
-    };
+      };
 
-    try {
+      try {
         await push(ref(db, 'orders'), orderData);
         alert('Sifarişiniz uğurla göndərildi!');
-
         saveCart([]);
         renderCart();
         modalBack.style.display = 'none';
-
-    } catch (error) {
+      } catch (error) {
         console.error("Sifariş göndərilərkən xəta baş verdi:", error);
         alert('Sifarişi göndərərkən xəta baş verdi. Zəhmət olmasa yenidən cəhd edin.');
-    }
-}
-
-    function openAdminPanel(){
-      modalTitle.textContent='Admin Panel - Məhsul əlavə et';
-      modalContent.innerHTML=`<div class='form-row'><label>Kateqoriya</label>
-      <select id='prodCat'>${CATEGORIES.map(c=>`<option value='${c.id}'>${c.title}</option>`).join('')}</select></div>
-      <div class='form-row'><label>Ad</label><input type='text' id='prodName'></div>
-      <div class='form-row'><label>Qiymət</label><input type='number' id='prodPrice' step='0.01'></div>
-      <div class='form-row'><label>Açıqlama</label><textarea id='prodDesc'></textarea></div>
-      <div class='form-row'><label>Şəkil URL (isteğe bağlı)</label><input type='text' id='prodImg'></div>
-      <div style='display:flex;gap:8px;justify-content:flex-end'>
-        <button class='btn' id='adminClose'>Bağla</button>
-        <button class='btn' id='addProduct'>Əlavə et</button>
-      </div>`;
-      modalBack.style.display='flex';
-      $('#adminClose').onclick=()=>{modalBack.style.display='none';};
-      $('#addProduct').onclick=async ()=>{
-        const name=$('#prodName').value.trim(); const cat=$('#prodCat').value; const price=parseFloat($('#prodPrice').value)||0; const desc=$('#prodDesc').value.trim(); const img=$('#prodImg').value.trim()||'https://via.placeholder.com/150';
-        if(!name||price<=0){alert('Ad və düzgün qiymət daxil edin');return;}
-        await push(ref(db,'products'),{name,cat,price,desc,img});
-        modalBack.style.display='none';
       }
     }
 
-    renderCategories(); renderProducts(); renderCart();
+    // Firebase load
+    onValue(ref(db, 'products'), snapshot => {
+      products = [];
+      snapshot.forEach(snap => {
+        const val = snap.val();
+        products.push({ ...val,
+          id: snap.key
+        });
+      });
+      renderProducts();
+    });
+
+    // Admin modal
+    const modalBack = $('#modalBack');
+    const modalContent = $('#modalContent');
+    const modalTitle = $('#modalTitle');
+
+    $('#adminOpen').onclick = () => openAdminLogin();
+
+    // Adminə giriş funksiyası
+    function openAdminLogin() {
+      modalTitle.textContent = 'Admin Girişi';
+      modalContent.innerHTML = `<div class='form-row'><label>Şifrə</label><input type='password' id='adminPass'></div>
+      <div style='display:flex;gap:8px;justify-content:flex-end'>
+          <button class='btn' id='adminCancel'>İmtina</button>
+          <button class='btn' id='adminDo'>Giriş</button>
+      </div>`;
+      modalBack.style.display = 'flex';
+      $('#adminCancel').onclick = () => {
+        modalBack.style.display = 'none';
+      };
+      $('#adminDo').onclick = async () => {
+        const val = $('#adminPass').value;
+        const valHash = await sha256(val);
+        if (valHash === ADMIN_HASH) {
+          openAdminSelection();
+        } else {
+          alert('Yanlış şifrə');
+        }
+      };
+    }
+
+    // Admin panelində seçimləri göstərən funksiya
+    function openAdminSelection() {
+      modalTitle.textContent = 'Admin Paneli';
+      modalContent.innerHTML = `
+          <p>Zəhmət olmasa bir seçim edin:</p>
+          <div style="display:flex; flex-direction:column; gap:10px; margin-top:15px;">
+              <button class='btn' id='addProductBtn' style='font-weight:bold;'>Məhsul Əlavə Et</button>
+              <button class='btn' id='viewOrdersBtn' style='font-weight:bold;'>Sifarişləri İzlə</button>
+          </div>
+          <div style='display:flex;justify-content:flex-end;margin-top:20px;'>
+              <button class='btn' id='adminClose'>Bağla</button>
+          </div>
+      `;
+      $('#adminClose').onclick = () => {
+        modalBack.style.display = 'none';
+      };
+      $('#addProductBtn').onclick = () => {
+        openAddProductPanel();
+      };
+      $('#viewOrdersBtn').onclick = () => {
+        openViewOrdersPanel();
+      };
+    }
+
+    // Məhsul əlavə etmə panelini açan funksiya
+    function openAddProductPanel() {
+      modalTitle.textContent = 'Admin Panel - Məhsul Əlavə Et';
+      modalContent.innerHTML = `
+          <div class='form-row'><label>Kateqoriya</label>
+              <select id='prodCat'>${CATEGORIES.map(c => `<option value='${c.id}'>${c.title}</option>`).join('')}</select>
+          </div>
+          <div class='form-row'><label>Ad</label><input type='text' id='prodName'></div>
+          <div class='form-row'><label>Qiymət</label><input type='number' id='prodPrice' step='0.01'></div>
+          <div class='form-row'><label>Açıqlama</label><textarea id='prodDesc'></textarea></div>
+          <div class='form-row'><label>Şəkil URL (isteğe bağlı)</label><input type='text' id='prodImg'></div>
+          <div style='display:flex;gap:8px;justify-content:flex-end'>
+              <button class='btn' id='adminBack'>Geri</button>
+              <button class='btn' id='addProduct'>Əlavə et</button>
+          </div>
+      `;
+      $('#adminBack').onclick = () => {
+        openAdminSelection();
+      };
+      $('#addProduct').onclick = async () => {
+        const name = $('#prodName').value.trim();
+        const cat = $('#prodCat').value;
+        const price = parseFloat($('#prodPrice').value) || 0;
+        const desc = $('#prodDesc').value.trim();
+        const img = $('#prodImg').value.trim() || 'https://via.placeholder.com/150';
+        if (!name || price <= 0) {
+          alert('Ad və düzgün qiymət daxil edin');
+          return;
+        }
+        await push(ref(db, 'products'), {
+          name,
+          cat,
+          price,
+          desc,
+          img
+        });
+        alert('Məhsul uğurla əlavə edildi!');
+        $('#prodName').value = '';
+        $('#prodPrice').value = '';
+        $('#prodDesc').value = '';
+        $('#prodImg').value = '';
+      };
+    }
+
+    // Sifarişlərə baxma panelini açan funksiya
+    function openViewOrdersPanel() {
+      modalTitle.textContent = 'Admin Panel - Sifarişləri İzlə';
+      modalContent.innerHTML = `
+          <div id="ordersList">
+              <p>Sifarişlər yüklənir...</p>
+          </div>
+          <div style='display:flex;justify-content:flex-end;margin-top:20px;'>
+              <button class='btn' id='adminBack'>Geri</button>
+          </div>
+      `;
+      $('#adminBack').onclick = () => {
+        openAdminSelection();
+      };
+      loadOrders();
+    }
+
+    // Sifarişləri Firebase-dən yükləyib göstərən funksiya
+    function loadOrders() {
+      const ordersListEl = $('#ordersList');
+      onValue(ref(db, 'orders'), (snapshot) => {
+        ordersListEl.innerHTML = '';
+        if (!snapshot.exists()) {
+          ordersListEl.innerHTML = '<p>Hələ heç bir sifariş yoxdur.</p>';
+          return;
+        }
+
+        const orders = snapshot.val();
+        const orderKeys = Object.keys(orders).reverse();
+
+        orderKeys.forEach(key => {
+          const order = orders[key];
+          const orderEl = document.createElement('div');
+          orderEl.style.border = '1px solid #ccc';
+          orderEl.style.borderRadius = '10px';
+          orderEl.style.padding = '15px';
+          orderEl.style.marginBottom = '10px';
+          orderEl.style.backgroundColor = '#f7f9fc';
+
+          const date = new Date(order.timestamp).toLocaleString('az-AZ');
+
+          let itemsHtml = ``;
+          if (order.items && order.items.length > 0) {
+            itemsHtml = `
+                <p style="font-weight: bold; margin-bottom: 5px;">Məhsullar:</p>
+                <ul>
+                    ${order.items.map(item => `
+                        <li>${item.name} (${item.qty} ədəd) - ${Number(item.price).toFixed(2)}₼</li>
+                    `).join('')}
+                </ul>
+            `;
+          }
+
+          orderEl.innerHTML = `
+                <div style="font-size: 14px; color: #555; margin-bottom: 10px;">
+                    <strong>Sifariş Ünvanı:</strong> Bina ${order.building}, Mərtəbə ${order.floor}, Otaq ${order.room}<br>
+                    <strong>Telefon Nömrəsi:</strong> ${order.phone}<br>
+                    <strong>Cəmi Məbləğ:</strong> ${Number(order.total).toFixed(2)}₼<br>
+                    <strong>Tarix:</strong> ${date}
+                </div>
+                ${itemsHtml}
+            `;
+          ordersListEl.appendChild(orderEl);
+        });
+      }, (error) => {
+        console.error("Sifarişləri yükləyərkən xəta baş verdi:", error);
+        ordersListEl.innerHTML = '<p>Sifarişləri yükləyərkən xəta baş verdi.</p>';
+      });
+    }
+
+    // Tətbiqi başlanğıcda yükləyən funksiyalar
+    renderCategories();
+    renderProducts();
+    renderCart();
   </script>
 </body>
 </html>
