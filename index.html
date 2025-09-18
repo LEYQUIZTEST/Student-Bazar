@@ -507,7 +507,7 @@ async function confirmOrder() {
     // Son sifariş nömrəsini alırıq
     const settingsRef = ref(db, 'settings/lastOrderId');
     const snapshot = await get(settingsRef);
-    const currentOrderId = snapshot.exists() ? snapshot.val() : 0;
+    const currentOrderId = snapshot.exists() ? Number(snapshot.val()) : 0;
 
     // Yeni sifariş nömrəsini artırırıq
     const newOrderId = currentOrderId + 1;
