@@ -203,6 +203,16 @@
       });
       $('#totalSum').textContent=total.toFixed(2);
     }
+	
+	// Checkout düyməsinin funksiyası
+$('#checkout').onclick = () => {
+    const cart = loadCart();
+    if (cart.length === 0) {
+        alert('Səbət boşdur. Zəhmət olmasa məhsul əlavə edin.');
+        return;
+    }
+    openCheckoutModal();
+};
 
     // Firebase load
     import { getDatabase } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-database.js";
@@ -233,6 +243,79 @@
         if(valHash===ADMIN_HASH) openAdminPanel(); else alert('Yanlış şifrə');
       }
     }
+	
+	// Sifariş məlumatlarını soruşan modalı açır
+function openCheckoutModal() {
+    modalTitle.textContent = 'Sifariş məlumatları';
+    modalContent.innerHTML = `
+        <div class='form-row'><label>Bina Nömrəsi</label>
+            <select id='building'>
+                <option value='A'>Bina A</option>
+                <option value='B'>Bina B</option>
+                <option value='C'>Bina C</option>
+            </select>
+        </div>
+        <div class='form-row'><label>Mərtəbə</label><input type='number' id='floor' placeholder='Məsələn: 5'></div>
+        <div class='form-row'><label>Otaq Nömrəsi</label><input type='text' id='room' placeholder='Məsələn: 504'></div>
+        <div class='form-row'><label>Əlaqə Nömrəsi</label><input type='tel' id='phone' placeholder='Məsələn: 0551234567'></div>
+        <div style='display:flex;gap:8px;justify-content:flex-end;margin-top:10px'>
+            <button class='btn' id='cancelOrder'>İmtina</button>
+            <button class='btn checkout' id='confirmOrder'>Təsdiqlə</button>
+        </div>
+    `;
+    modalBack.style.display = 'flex';
+
+    $('#cancelOrder').onclick = () => {
+        modalBack.style.display = 'none';
+    };
+
+    $('#confirmOrder').onclick = () => {
+        confirmOrder();
+    };
+}
+
+// Sifarişi Firebase-ə göndərir
+async function confirmOrder() {
+    const building = $('#building').value;
+    const floor = $('#floor').value.trim();
+    const room = $('#room').value.trim();
+    const phone = $('#phone').value.trim();
+    const cart = loadCart();
+    const total = parseFloat($('#totalSum').textContent);
+
+    if (!floor || !room || !phone) {
+        alert('Bütün sahələri doldurmaq zəruridir.');
+        return;
+    }
+
+    if (cart.length === 0) {
+        alert('Səbət boşdur.');
+        return;
+    }
+
+    const orderData = {
+        building,
+        floor,
+        room,
+        phone,
+        total,
+        items: cart,
+        timestamp: new Date().toISOString()
+    };
+
+    try {
+        await push(ref(db, 'orders'), orderData);
+        alert('Sifarişiniz uğurla göndərildi!');
+
+        saveCart([]);
+        renderCart();
+        modalBack.style.display = 'none';
+
+    } catch (error) {
+        console.error("Sifariş göndərilərkən xəta baş verdi:", error);
+        alert('Sifarişi göndərərkən xəta baş verdi. Zəhmət olmasa yenidən cəhd edin.');
+    }
+}
 
     function openAdminPanel(){
       modalTitle.textContent='Admin Panel - Məhsul əlavə et';
@@ -260,4 +343,3 @@
   </script>
 </body>
 </html>
-
