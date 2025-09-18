@@ -311,7 +311,7 @@
 
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-app.js";
-    import { getDatabase, ref, push, onValue } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-database.js";
+    import { getDatabase, ref, push, onValue, get, set } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-database.js";
 
     const firebaseConfig = {
       apiKey: "AIzaSyC2g57gFRsfA3-U-tnBTS52Jj0mI5xJhaA",
@@ -438,80 +438,131 @@
       openCheckoutModal();
     };
 
+ 
     // Sifariş məlumatlarını soruşan modalı açır
-    function openCheckoutModal() {
-      const modalBack = $('#modalBack');
-      const modalContent = $('#modalContent');
-      const modalTitle = $('#modalTitle');
+function openCheckoutModal() {
+  const modalBack = $('#modalBack');
+  const modalContent = $('#modalContent');
+  const modalTitle = $('#modalTitle');
 
-      modalTitle.textContent = 'Sifariş məlumatları';
-      modalContent.innerHTML = `
-        <div class='form-row'><label>Bina Nömrəsi</label>
-            <select id='building'>
-                <option value='A'>Bina A</option>
-                <option value='B'>Bina B</option>
-                <option value='C'>Bina C</option>
-            </select>
-        </div>
-        <div class='form-row'><label>Mərtəbə</label><input type='number' id='floor' placeholder='Məsələn: 5'></div>
-        <div class='form-row'><label>Otaq Nömrəsi</label><input type='text' id='room' placeholder='Məsələn: 504'></div>
-        <div class='form-row'><label>Əlaqə Nömrəsi</label><input type='tel' id='phone' placeholder='Məsələn: 0551234567'></div>
-        <div style='display:flex;gap:8px;justify-content:flex-end;margin-top:10px'>
-            <button class='btn' id='cancelOrder'>İmtina</button>
-            <button class='btn checkout' id='confirmOrder'>Təsdiqlə</button>
-        </div>
-    `;
-      modalBack.style.display = 'flex';
+  modalTitle.textContent = 'Sifariş məlumatları';
+  modalContent.innerHTML = `
+    <div class='form-row'><label>Bina Nömrəsi</label>
+        <select id='building'>
+            <option value='A'>Bina A</option>
+            <option value='B'>Bina B</option>
+            <option value='C'>Bina C</option>
+        </select>
+    </div>
+    <div class='form-row'><label>Mərtəbə</label><input type='number' id='floor' placeholder='Məsələn: 5'></div>
+    <div class='form-row'><label>Otaq Nömrəsi</label><input type='text' id='room' placeholder='Məsələn: 504'></div>
+    <div class='form-row'><label>Əlaqə Nömrəsi</label><input type='tel' id='phone' placeholder='Məsələn: 0551234567'></div>
+    <div class='form-row'><label>Ödəmə Üsulu</label>
+        <select id='paymentMethod'>
+            <option value='Nağd'>Nağd</option>
+            <option value='Kartdan karta'>Kartdan karta</option>
+            <option value='M10'>M10</option>
+        </select>
+    </div>
+    <div style='display:flex;gap:8px;justify-content:flex-end;margin-top:10px'>
+        <button class='btn' id='cancelOrder'>İmtina</button>
+        <button class='btn checkout' id='confirmOrder'>Təsdiqlə</button>
+    </div>
+`;
+  modalBack.style.display = 'flex';
 
-      $('#cancelOrder').onclick = () => {
-        modalBack.style.display = 'none';
-      };
+  $('#cancelOrder').onclick = () => {
+    modalBack.style.display = 'none';
+  };
 
-      $('#confirmOrder').onclick = () => {
-        confirmOrder();
-      };
-    }
+  $('#confirmOrder').onclick = () => {
+    confirmOrder();
+  };
+}
 
-    // Sifarişi Firebase-ə göndərir
-    async function confirmOrder() {
-      const building = $('#building').value;
-      const floor = $('#floor').value.trim();
-      const room = $('#room').value.trim();
-      const phone = $('#phone').value.trim();
-      const cart = loadCart();
-      const total = parseFloat($('#totalSum').textContent);
+  
+// Sifarişi Firebase-ə göndərir və WhatsApp-a yönləndirir
+// Sifarişi Firebase-ə göndərir və WhatsApp-a yönləndirir
+// Sifarişi Firebase-ə göndərir və WhatsApp-a yönləndirir
+async function confirmOrder() {
+  const building = $('#building').value;
+  const floor = $('#floor').value.trim();
+  const room = $('#room').value.trim();
+  const phone = $('#phone').value.trim();
+  const paymentMethod = $('#paymentMethod').value;
+  const cart = loadCart();
+  const total = parseFloat($('#totalSum').textContent);
 
-      if (!floor || !room || !phone) {
-        alert('Bütün sahələri doldurmaq zəruridir.');
-        return;
-      }
+  if (!floor || !room || !phone) {
+    alert('Bütün sahələri doldurmaq zəruridir.');
+    return;
+  }
 
-      if (cart.length === 0) {
-        alert('Səbət boşdur.');
-        return;
-      }
+  if (cart.length === 0) {
+    alert('Səbət boşdur.');
+    return;
+  }
 
-      const orderData = {
-        building,
-        floor,
-        room,
-        phone,
-        total,
-        items: cart,
-        timestamp: new Date().toISOString()
-      };
+  try {
+    // Son sifariş nömrəsini alırıq
+    const settingsRef = ref(db, 'settings/lastOrderId');
+    const snapshot = await get(settingsRef);
+    const currentOrderId = snapshot.exists() ? snapshot.val() : 0;
 
-      try {
-        await push(ref(db, 'orders'), orderData);
-        alert('Sifarişiniz uğurla göndərildi!');
-        saveCart([]);
-        renderCart();
-        modalBack.style.display = 'none';
-      } catch (error) {
-        console.error("Sifariş göndərilərkən xəta baş verdi:", error);
-        alert('Sifarişi göndərərkən xəta baş verdi. Zəhmət olmasa yenidən cəhd edin.');
-      }
-    }
+    // Yeni sifariş nömrəsini artırırıq
+    const newOrderId = currentOrderId + 1;
+
+    // Yeni sifariş məlumatlarını hazırlayırıq
+    const orderData = {
+      orderId: newOrderId,
+      building,
+      floor,
+      room,
+      phone,
+      paymentMethod,
+      total,
+      items: cart,
+      timestamp: new Date().toISOString()
+    };
+
+    // Firebase-ə yeni sifarişi əlavə edirik
+    await push(ref(db, 'orders'), orderData);
+
+    // Firebase-də son sifariş nömrəsini yeniləyirik
+    await set(ref(db, 'settings/lastOrderId'), newOrderId);
+
+    // WhatsApp mesajını hazırlayırıq
+    let message = `*Yeni Sifariş*\n`;
+    message += `--------------------\n`;
+    message += `*Sifariş ID*: ${newOrderId}\n`;
+    message += `*Bina*: ${building}\n`;
+    message += `*Mərtəbə*: ${floor}\n`;
+    message += `*Otaq*: ${room}\n`;
+    message += `*Əlaqə*: ${phone}\n`;
+    message += `*Ödəmə Üsulu*: ${paymentMethod}\n`;
+    message += `*Ümumi Məbləğ*: ${total.toFixed(2)}₼\n\n`;
+    message += `*Məhsullar*:\n`;
+
+    cart.forEach(item => {
+      message += `- ${item.name} (${item.qty} ədəd) - ${Number(item.price).toFixed(2)}₼\n`;
+    });
+
+    const whatsappURL = `https://wa.me/994998995001?text=${encodeURIComponent(message)}`;
+
+    // İstifadəçini WhatsApp-a yönləndiririk
+    window.location.href = whatsappURL;
+
+    // İstifadəçiyə sifarişin göndərildiyini bildiririk və səbəti təmizləyirik
+    alert('Sifarişiniz qəbul edildi. Detalları göndərmək üçün WhatsApp pəncərəsində "Göndər" düyməsinə klikləyin.');
+    saveCart([]);
+    renderCart();
+    modalBack.style.display = 'none';
+
+  } catch (error) {
+    console.error("Sifariş göndərilərkən xəta baş verdi:", error);
+    alert('Sifarişi göndərərkən xəta baş verdi. Zəhmət olmasa yenidən cəhd edin.');
+  }
+}
 
     // Firebase load
     onValue(ref(db, 'products'), snapshot => {
