@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="az">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tələbə Bazar</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f5f5f7;
+      margin: 0;
+      padding: 0;
+    }
+    header {
+      background: #007aff;
+      color: white;
+      padding: 15px;
+      text-align: center;
+      position: relative;
+    }
+    #adminBtn {
+      position: absolute;
+      right: 15px;
+      top: 15px;
+      background: white;
+      color: #007aff;
+      padding: 6px 12px;
+      border-radius: 12px;
+      border: none;
+      cursor: pointer;
+    }
+    .category {
+      padding: 20px;
+    }
+    .product {
+      background: white;
+      margin: 10px 0;
+      padding: 15px;
+      border-radius: 15px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    .product h3 {
+      margin: 0;
+      color: #007aff;
+    }
+    #adminPanel {
+      display: none;
+      padding: 20px;
+      background: #fff;
+      border-radius: 15px;
+      margin: 20px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    #adminPanel input, #adminPanel textarea {
+      width: 100%;
+      margin: 5px 0;
+      padding: 8px;
+      border: 1px solid #ccc;
+      border-radius: 10px;
+    }
+    #adminPanel button {
+      background: #007aff;
+      color: white;
+      padding: 8px 15px;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Tələbə Bazar</h1>
+    <button id="adminBtn">Admin Girişi</button>
+  </header>
+
+  <div id="products"></div>
+
+  <div id="adminPanel">
+    <h2>Məhsul əlavə et</h2>
+    <input type="text" id="name" placeholder="Məhsul adı">
+    <textarea id="desc" placeholder="Açıqlama"></textarea>
+    <input type="number" id="price" placeholder="Qiymət (AZN)">
+    <button id="addProductBtn">Əlavə et</button>
+  </div>
+
+  <!-- Firebase SDK -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-app.js";
+    import { getDatabase, ref, push, onValue } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-database.js";
+
+    // 🔑 Sizin Firebase config
+    const firebaseConfig = {
+      apiKey: "AIzaSyC2g57gFRsfA3-U-tnBTS52Jj0mI5xJhaA",
+      authDomain: "student-bazar-53bcf.firebaseapp.com",
+      databaseURL: "https://student-bazar-53bcf-default-rtdb.firebaseio.com",
+      projectId: "student-bazar-53bcf",
+      storageBucket: "student-bazar-53bcf.firebasestorage.app",
+      messagingSenderId: "236779372508",
+      appId: "1:236779372508:web:5d1402edd93fa8b92b5919",
+      measurementId: "G-8JFZK2QHM6"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getDatabase(app);
+
+    const productsDiv = document.getElementById("products");
+    const adminBtn = document.getElementById("adminBtn");
+    const adminPanel = document.getElementById("adminPanel");
+
+    // 🔐 Sadə parol (test üçün)
+    let isAdmin = false;
+    adminBtn.addEventListener("click", () => {
+      if (!isAdmin) {
+        let pass = prompt("Admin parolunu daxil edin:");
+        if (pass === "admin123") {
+          isAdmin = true;
+          adminPanel.style.display = "block";
+          adminBtn.textContent = "Admin Panel";
+        } else {
+          alert("Səhv parol!");
+        }
+      } else {
+        adminPanel.style.display = (adminPanel.style.display === "none") ? "block" : "none";
+      }
+    });
+
+    // ✅ Məhsul əlavə etmək
+    document.getElementById("addProductBtn").addEventListener("click", () => {
+      const name = document.getElementById("name").value;
+      const desc = document.getElementById("desc").value;
+      const price = document.getElementById("price").value;
+
+      if (name && desc && price) {
+        push(ref(db, "products/"), {
+          name: name,
+          description: desc,
+          price: price
+        });
+        alert("Məhsul əlavə olundu!");
+        document.getElementById("name").value = "";
+        document.getElementById("desc").value = "";
+        document.getElementById("price").value = "";
+      } else {
+        alert("Bütün xanaları doldurun!");
+      }
+    });
+
+    // ✅ Məhsulları oxumaq və göstərmək
+    function loadProducts() {
+      const productsRef = ref(db, "products/");
+      onValue(productsRef, (snapshot) => {
+        const data = snapshot.val();
+        productsDiv.innerHTML = "";
+        for (let id in data) {
+          let item = data[id];
+          productsDiv.innerHTML += `
+            <div class="product">
+              <h3>${item.name}</h3>
+              <p>${item.description}</p>
+              <strong>${item.price} AZN</strong>
+            </div>
+          `;
+        }
+      });
+    }
+
+    loadProducts();
+  </script>
+</body>
+</html>
